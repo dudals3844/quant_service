@@ -1,46 +1,17 @@
+from dataclasses import dataclass
+
 import pymysql
 import sqlalchemy as sqlalchemy
 from sqlalchemy.engine.url import URL
 import pandas as pd
 
-
+@dataclass
 class DBProperty:
-    __user = None
-    __password = None
-    __host = None
-    __database_name = None
+    database_name: str = None
+    user: str = None
+    password: str = None
+    host: str = None
 
-    @property
-    def user(self):
-        return self.__user
-
-    @user.setter
-    def user(self, user):
-        self.__user = user
-
-    @property
-    def password(self):
-        return self.__password
-
-    @password.setter
-    def password(self, password):
-        self.__password = password
-
-    @property
-    def host(self):
-        return self.__host
-
-    @host.setter
-    def host(self, host):
-        self.__host = host
-
-    @property
-    def database_name(self):
-        return self.database_name
-
-    @database_name.setter
-    def database_name(self, database_name):
-        self.__database_name = database_name
 
 
 class DB:
@@ -95,3 +66,14 @@ class DB:
 
     def drop_all_table(self):
         list(map(self.drop_table, self.get_tables()))
+
+
+if __name__ == "__main__":
+    db_prop = DBProperty()
+    db_prop.database_name = 'krx'
+    db_prop.user = 'root'
+    db_prop.password = '3844'
+    db_prop.host = 'localhost'
+    db = DB(db_prop)
+
+    print(db.get_tables())
