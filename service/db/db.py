@@ -8,6 +8,7 @@ class DBProperty:
     __user = None
     __password = None
     __host = None
+    __database_name = None
 
     @property
     def user(self):
@@ -33,13 +34,22 @@ class DBProperty:
     def host(self, host):
         self.__host = host
 
+    @property
+    def database_name(self):
+        return self.database_name
 
-class DB(DBProperty):
+    @database_name.setter
+    def database_name(self, database_name):
+        self.__database_name = database_name
+
+
+class DB:
     database_name = None
     sqlalchemy_connector = None
+    db_property = None
 
-    def __init__(self, database_name):
-        self.database_name = database_name
+    def __init__(self, db_property: DBProperty):
+        self.db_property = db_property
         self.sqlalchemy_connector = self._get_sqlalchemy_connector()
         self.pymysql_connector = self._get_pymysql_connector()
         self.pymysql_cursor = self.pymysql_connector.cursor()
@@ -48,16 +58,21 @@ class DB(DBProperty):
         pymysql.install_as_MySQLdb()
         conn = sqlalchemy.create_engine(URL(
             drivername='mysql',
-            username=self.__user,
-            password=self.__password,
-            host=self.__host,
-            database=self.database_name
+            username=self.db_property.user,
+            password=self.db_property.password,
+            host=self.db_property.host,
+            database=self.db_property.database_name
         ))
         return conn
 
     def _get_pymysql_connector(self):
-        return pymysql.connect(host=self.__host, user=self.__user, password=self.__password,
-                               db=self.database_name, charset='utf8')
+        return pymysql.connect(
+            host=self.db_property.host,
+            user=self.db_property.user,
+            password=self.db_property.password,
+            db=self.db_property.database_name,
+            charset='utf8'
+        )
 
     def con_close(self):
         self.pymysql_connector.close()
