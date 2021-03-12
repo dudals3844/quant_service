@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='quantservice',
-    version='0.0.4',
+    version='0.0.5',
     url='https://github.com/dudals3844/quant_service',
     author='ChoiYoungMin',
     author_email='dudals3844@gmail.com',
