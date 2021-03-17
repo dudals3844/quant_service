@@ -5,13 +5,13 @@ import sqlalchemy as sqlalchemy
 from sqlalchemy.engine.url import URL
 import pandas as pd
 
+
 @dataclass
 class DBProperty:
     database_name: str = None
     user: str = None
     password: str = None
     host: str = None
-
 
 
 class DB:
@@ -49,6 +49,9 @@ class DB:
         self.pymysql_connector.close()
         self.sqlalchemy_connector.dispose()
 
+        del (self.pymysql_connector)
+        del (self.sqlalchemy_connector)
+
     def get_sqlalchemy_connector(self):
         return self.sqlalchemy_connector
 
@@ -66,14 +69,3 @@ class DB:
 
     def drop_all_table(self):
         list(map(self.drop_table, self.get_tables()))
-
-
-if __name__ == "__main__":
-    db_prop = DBProperty()
-    db_prop.database_name = 'krx'
-    db_prop.user = 'root'
-    db_prop.password = '3844'
-    db_prop.host = 'localhost'
-    db = DB(db_prop)
-
-    print(db.get_tables())
