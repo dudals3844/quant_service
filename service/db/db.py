@@ -49,9 +49,6 @@ class DB:
         self.pymysql_connector.close()
         self.sqlalchemy_connector.dispose()
 
-        del (self.pymysql_connector)
-        del (self.sqlalchemy_connector)
-
     def get_sqlalchemy_connector(self):
         return self.sqlalchemy_connector
 
